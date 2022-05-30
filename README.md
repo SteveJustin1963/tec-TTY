@@ -24,7 +24,8 @@ Mod a typewriter
 - https://en.wikipedia.org/wiki/TTY
 - https://en.wikipedia.org/wiki/Telex
 - https://hackaday.com/tag/tty/, https://www.youtube.com/watch?v=OYJti8dJMV4
-- 
+- https://en.wikipedia.org/wiki/MegaHAL
+- https://en.wikipedia.org/wiki/Hidden_Markov_model
 - 
 
 ### Related technical references
