@@ -10,7 +10,7 @@ Asynchronous protocols are a type of serial communication protocol where data is
 Serial terminals and TTY devices played a significant role in early computer systems, providing a means for users to interact with computers and input commands. They have largely been replaced by graphical user interfaces and modern computer keyboards, but the term "TTY" is still sometimes used to refer to virtual consoles or terminal emulators in Unix-like operating systems.
 
 ### proj - Mod a typewriter
-Adapting a TTY or serial terminal, such as the TEC-1 TTY, to a Z80 Single-Board Computer (SBC) would involve establishing a serial communication interface between the two systems. Here are the general steps to accomplish this:
+Adapting a TTY or serial terminal,  to a Z80 Single-Board Computer (SBC) would involve establishing a serial communication interface between the two systems. Here are the general steps to accomplish this:
 
 1. Identify the serial interface on the Z80 SBC: Determine the available serial communication ports on the Z80 SBC. This could be a built-in UART (Universal Asynchronous Receiver-Transmitter) or a serial expansion module.
 
