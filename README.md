@@ -1,11 +1,13 @@
 # tec-TTY
-TEC-1 TTY for 
-- Teleprinter or teletypewriter (TTY), an electromechanical typewriter paired with a communication channel. Sometimes used more generally for any type of computer terminal. Sometimes used for a virtual console, typically accessed by CTRL+ALT+F# and identified as tty1, tty2, tty3... in UNIX etc.
-- Radioteletype (RTTY) is a telecommunications system consisting originally of two or more electromechanical teleprinters in different locations connected by radio rather than a wired link.
-- Telex, a networked, station-to-station switched network of teleprinters similar to a telephone network, using telegraph-grade connecting circuits for two-way text-based messages.
-- async protocols
-- serial terminals
-- 
+TEC-1 TTY, or TEC-1 Teleprinter/Teletypewriter, is an example of a serial terminal that was widely used in the early days of computing. A serial terminal is a device that allows users to interact with a computer or mainframe using a serial communication protocol.
+
+The TEC-1 TTY was an electromechanical typewriter that could be connected to a computer or mainframe using a serial connection. It provided a means for users to input commands and receive output from the computer. The TEC-1 TTY used a teleprinter-style interface, where characters were typed on a keyboard and transmitted one at a time to the computer.
+
+In addition to the TEC-1 TTY, there were other types of serial terminals used in the past, including video terminals and ASCII terminals. These terminals typically connected to the computer using a serial port and used asynchronous communication protocols.
+
+Asynchronous protocols are a type of serial communication protocol where data is transmitted one character at a time, with each character preceded by a start bit and followed by one or more stop bits. This allows for communication between devices that may have slightly different timing or clock rates.
+
+Serial terminals and TTY devices played a significant role in early computer systems, providing a means for users to interact with computers and input commands. They have largely been replaced by graphical user interfaces and modern computer keyboards, but the term "TTY" is still sometimes used to refer to virtual consoles or terminal emulators in Unix-like operating systems.
 
 ### proj
 Mod a typewriter
