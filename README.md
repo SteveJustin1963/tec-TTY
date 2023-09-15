@@ -26,5 +26,21 @@ The specific steps and code required for adapting the TTY to a Z80 SBC will depe
 
 
 ## RTTY
-code
+RTTY stands for "Radio Teletype," and it is a communication mode used in radio and telecommunications for transmitting text messages. It is also known as "Radioteletype" or "Radio TeleTYpe." RTTY was widely used in the past for sending text-based information over long distances, particularly in fields like maritime communication and broadcasting. Here's a more detailed explanation of RTTY:
+
+1. **Encoding Method**: RTTY encodes characters into electrical or radio frequency signals for transmission. It uses a combination of two frequencies, known as "shifts," to represent binary data. The most common shifts are 170 Hz and 850 Hz, although other variations exist.
+
+2. **Character Transmission**: Each character in the message is represented as a series of bits (usually 5 or 7 bits per character), and these bits are then transmitted using the specified frequency shifts. Typically, start and stop bits are used to frame each character for synchronization.
+
+3. **Usage**: RTTY was historically used for transmitting text messages over long distances, especially in situations where voice communication was not ideal or feasible. It found applications in areas like telegraphy, weather reporting, aviation communication, and naval communication.
+
+4. **Equipment**: To transmit and receive RTTY signals, specialized equipment is required. This includes teletype machines, which were widely used in the past, and later, computer-based systems with sound cards and software capable of generating and decoding RTTY signals.
+
+5. **Shifts and Speeds**: RTTY can be transmitted at various speeds, measured in words per minute (WPM). Common speeds include 45.45 baud (which equates to 50 WPM when using a 5-bit code), 75 baud (66 WPM), and 100 baud (110 WPM). The choice of speed depends on factors such as signal propagation conditions and available bandwidth.
+
+6. **Advantages and Limitations**: RTTY has the advantage of being able to transmit text information over long distances with relatively simple equipment. However, it is not as bandwidth-efficient as modern digital communication modes like PSK31 or FT8, which can transmit more data in the same bandwidth.
+
+7. **Legacy and Modern Use**: While RTTY is no longer the primary mode of communication for most applications due to the prevalence of digital communication technologies, it is still used in some niche areas and enjoys popularity among amateur radio operators for its historical significance and the charm of "old-school" communication.
+
+
 
