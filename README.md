@@ -9,18 +9,20 @@ Asynchronous protocols are a type of serial communication protocol where data is
 
 Serial terminals and TTY devices played a significant role in early computer systems, providing a means for users to interact with computers and input commands. They have largely been replaced by graphical user interfaces and modern computer keyboards, but the term "TTY" is still sometimes used to refer to virtual consoles or terminal emulators in Unix-like operating systems.
 
-### proj - Mod a typewriter
+### Mod a an electric typewriter into a TTY
 Adapting a TTY or serial terminal,  to a Z80 Single-Board Computer (SBC) would involve establishing a serial communication interface between the two systems. Here are the general steps to accomplish this:
 
 1. Identify the serial interface on the Z80 SBC: Determine the available serial communication ports on the Z80 SBC. This could be a built-in UART (Universal Asynchronous Receiver-Transmitter) or a serial expansion module.
 
-2. Connect the TTY to the Z80 SBC: Connect the TTY device to the serial interface on the Z80 SBC. This typically involves connecting the appropriate wires for transmit (TX), receive (RX), ground (GND), and possibly other control signals such as data terminal ready (DTR) and request to send (RTS).
+2. Connect the TTY to the Z80 SBC:
+   - consider compatability or lack of for electric voltages, currents etc
+   - Connect the TTY device to the serial interface on the Z80 SBC. This typically involves connecting the appropriate wires for transmit (TX), receive (RX), ground (GND), and possibly other control signals such as data terminal ready (DTR) and request to send (RTS).
 
-3. Configure the serial communication settings: Set the desired baud rate, data bits, stop bits, and parity on both the TTY and the Z80 SBC. These settings need to match for proper communication.
+4. Configure the serial communication settings: Set the desired baud rate, data bits, stop bits, and parity on both the TTY and the Z80 SBC. These settings need to match for proper communication.
 
-4. Implement the serial communication protocol: On the Z80 SBC, you'll need to write software to handle the serial communication. This typically involves initializing the UART, setting up interrupts if necessary, and implementing code to send and receive data over the serial port.
+5. Implement the serial communication protocol: On the Z80 SBC, you'll need to write software to handle the serial communication. This typically involves initializing the UART, setting up interrupts if necessary, and implementing code to send and receive data over the serial port.
 
-5. Handle input and output on the Z80 SBC: Once the serial communication is established, you'll need to handle input and output from the TTY device on the Z80 SBC. This could involve reading characters received from the TTY and processing them as commands or displaying output on the TTY by sending characters from the Z80 SBC.
+6. Handle input and output on the Z80 SBC: Once the serial communication is established, you'll need to handle input and output from the TTY device on the Z80 SBC. This could involve reading characters received from the TTY and processing them as commands or displaying output on the TTY by sending characters from the Z80 SBC.
 
 The specific steps and code required for adapting the TTY to a Z80 SBC will depend on the exact hardware and software environment you are working with. The documentation and resources available for your specific Z80 SBC and TTY device will be valuable references during the adaptation process.
 
