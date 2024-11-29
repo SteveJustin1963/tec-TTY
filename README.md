@@ -216,3 +216,137 @@ Key features:
 :Z I                      // Initialize
    t @ ( M ) /E ( R ) ;  // Transmit or receive
 ```
+
+
+## requirements to modify an electric typewriter into a TTY for the TEC-1,
+hardware needed:
+
+1. Interface Hardware Needed:
+- Solenoid drivers for each key (to simulate key presses)
+- Key position sensors or switches to detect typewriter key presses
+- Current limiting resistors and protection diodes
+- Buffer/level shifters (for voltage compatibility)
+
+2. Control Logic Required:
+- Microcontroller or interface circuit to:
+  * Convert serial data to solenoid activations
+  * Convert key detections to serial data
+  * Handle timing/synchronization
+  * Manage power for solenoids
+
+3. Power Supply Requirements:
+- Separate power supply for solenoids (likely 12V or 24V)
+- Logic level power supply (5V)
+- Common ground between systems
+
+4. Additional Components:
+- Optocouplers for electrical isolation
+- Shift registers for parallel control
+- Filtering capacitors
+- Status LEDs
+- Reset circuit
+
+## complete design 
+ 
+1. Hardware Components:
+
+![image](https://github.com/user-attachments/assets/0ecb337c-e8bd-4ded-83c4-2470c3e47c06)
+
+- Power supplies (12V/24V for solenoids, 5V for logic)
+- 74HC595 shift register for solenoid control
+- ULN2803A Darlington arrays for solenoid drivers
+- 74HC165 shift register for key scanning
+- 4N25 optocouplers for isolation
+- Protection diodes and resistors
+
+2. Key Features:
+
+![image](https://github.com/user-attachments/assets/1085410a-2966-4f45-9811-251e1c74dc5a)
+
+- Bidirectional operation (typing and receiving)
+- Solenoid timing control
+- Key scanning
+- Serial interface to TEC-1
+- Electrical isolation
+- Protection circuits
+
+3. Software Features:
+- Solenoid pattern generation
+- Key scanning and debounce
+- Mode selection (type/receive)
+- Buffer management
+- Timing control
+- Test functions
+
+```
+// TTY Interface Control Code
+// Variables:
+// p = shift register port (#80)
+// k = key scan port (#81)
+// s = solenoid delay time
+// b = key buffer
+// t = type mode flag
+// d = data latch
+
+// Initialize system
+:I #80 p!          // Shift register port
+   #81 k!          // Key scan port
+   50 s!           // Solenoid timing
+   [ 0 0 0 0 0 0 0 0 ] b! // Key buffer
+   /T t!           // Start in type mode
+   0 d! ;          // Clear data latch
+
+// Shift out solenoid pattern
+:S d!              // Save pattern
+   8 (             // 8 bits
+     d 7 } 1 & p /O // Output MSB
+     d { d!        // Shift left
+   ) ;
+
+// Scan for key press
+:K k /I b!         // Read key port to buffer
+   8 (             // Check 8 bits
+     b /i ? 1 & (  // If bit set
+       /i S        // Activate solenoid
+       s ()        // Delay
+       0 S         // Release solenoid
+     )
+   ) ;
+
+// Serial receive handler
+:R /K d!           // Get character
+   d S             // Activate solenoid
+   s ()           // Hold time
+   0 S ;          // Release
+
+// Serial transmit handler
+:T K              // Scan keys
+   b 0 ? /F = (   // If key pressed
+     b 0 ? .      // Send character
+   ) ;
+
+// Main control loop
+:M I              // Initialize
+   /U (           // Loop forever
+     t @ (        // If type mode
+       T          // Handle typing
+     ) /E (       // Else
+       R          // Handle receive
+     )
+   ) ;
+
+// Test program
+:Y I              // Initialize
+   `TEST` R       // Test receive
+   1000( T ) ;    // Test transmit
+
+// Mode toggle
+:W t @ /F t! ;    // Toggle type mode
+```
+
+4. Usage:
+```mint
+:M    // Run main program
+:Y    // Run test sequence
+:W    // Toggle mode
+```
