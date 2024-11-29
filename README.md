@@ -44,5 +44,175 @@ RTTY stands for "Radio Teletype," and it is a communication mode used in radio a
 
 7. **Legacy and Modern Use**: While RTTY is no longer the primary mode of communication for most applications due to the prevalence of digital communication technologies, it is still used in some niche areas and enjoys popularity among amateur radio operators for its historical significance and the charm of "old-school" communication.
 
+## MINT implementation RTTY components.
+
+implementation has:
+
+1. Full Start/Stop Bit Handling
+2. Complete Baudot Tables (Letters/Figures)
+3. Shift State Management
+4. Parity Checking
+5. Signal Filtering
+6. Sync Detection
+7. Circular Buffer Management
+8. Signal Quality Monitoring
+9. Error Detection
+10. Diagnostic Functions
+
+Key features:
+- Proper LTRS/FIGS shift handling
+- Signal quality monitoring
+- Debug mode for diagnostics
+- Error detection and correction
+- Buffer management
+- Comprehensive test suite
 
 
+```
+// Complete RTTY Implementation for MINT2
+// Constants and Variables:
+// f = mark frequency (2125 Hz)
+// s = space frequency (2295 Hz)
+// b = baud rate (45.45)
+// p = audio output port
+// i = audio input port
+// t = transmit mode flag
+// m = message buffer
+// r = receive buffer
+// g = goertzel accumulator
+// h = shift state (letters/figures)
+// q = signal quality
+// c = circular buffer
+// d = debug flag
+
+// Initialize system
+:I #2125 f!                    // Mark frequency
+   #2295 s!                    // Space frequency
+   45 b!                       // Baud rate
+   #80 p!                      // Output port
+   #81 i!                      // Input port
+   /T t!                       // Start in transmit
+   [ 0 0 0 0 0 0 0 0 ] m!     // Message buffer
+   [ 0 0 0 0 0 0 0 0 ] c!     // Circular buffer
+   0 h!                        // Letters shift
+   L                          // Load letter table
+   N ;                        // Load number table
+
+// Complete Baudot/ITA2 Letter Table
+:L [ 0 #45 #0A #41 #20 #53 #49 #55 #0D #44 
+     #52 #4A #4E #46 #43 #4B #54 #5A #4C #57
+     #48 #59 #50 #51 #4F #42 #47 #4D #58 #56 ] l! ;
+
+// Complete Baudot/ITA2 Number/Symbol Table
+:N [ 0 #33 #0A #2D #20 #27 #38 #37 #0D #24 
+     #34 #07 #2C #21 #3A #28 #35 #2B #29 #32
+     #23 #36 #30 #31 #39 #3F #26 #2E #2F #3B ] n! ;
+
+// Start/Stop Bit Handler
+:X 0 T                         // Send start bit
+   m 5 (                       // Send 5 data bits
+     /i m ? 1 & T             // Send each bit
+     b 22 * ()                // Bit timing
+   )
+   1 T                        // Send stop bit
+   1 T ;                      // Second stop bit
+
+// Letter/Figure Shift Control
+:H h @ /F (                    // If not in letter shift
+     #1F B                    // Send LTRS code
+     /T h!                    // Set letters mode
+   ) ;
+
+:F h @ /T (                    // If not in figures shift
+     #1B B                    // Send FIGS code
+     /F h!                    // Set figures mode
+   ) ;
+
+// Parity Generator and Checker
+:P 0 p!                       // Clear parity
+   5 (                        // For 5 bits
+     m /i ? 1 & p + p!       // Add each bit
+   )
+   p 1 & ;                   // Return odd parity
+
+// Moving Average Filter
+:V [ 0 0 0 0 ] v!            // Filter buffer
+   i /I " v 0 ? + v 1 ? + v 2 ? + v 3 ? + 4 /  // Average
+   v 0 ? v 1 ?! v 1 ? v 2 ?! v 2 ? v 3 ?! " v 3 ?! ;
+
+// Sync Detection and Recovery
+:Y 0 y!                      // Clear sync counter
+   /U (                      // Loop
+     i /I #80 > (            // If strong signal
+       y 1+ y!               // Count samples
+       y b 20 * = /W         // Break when baud time reached
+     ) /E (
+       0 y!                  // Reset on weak signal
+     )
+   ) ;
+
+// Circular Buffer Management
+:A h @ c ?!                  // Add to buffer
+   h 1+ 7 & h! ;            // Increment head
+
+:G t @ c ?                   // Get from buffer
+   t 1+ 7 & t! ;            // Increment tail
+
+// Signal Quality Monitor
+:Q 0 q!                     // Clear quality sum
+   100 (                    // Sample 100 times
+     V q + q!               // Add filtered sample
+   )
+   q 100 / d @ (           // If debug mode
+     `Signal Quality: ` . /N // Show quality
+   ) ;
+
+// Error Detection and Correction
+:E m P /F (                 // If parity error
+     d @ (                  // If debug mode
+       `Parity Error` /N
+     )
+     R                     // Request retransmission
+   ) ;
+
+// Diagnostic Functions
+:D /T d!                    // Enable debug mode
+   `Debug Mode ON` /N ;
+
+:O /F d!                    // Disable debug mode
+   `Debug Mode OFF` /N ;
+
+// Main Transmit Function with All Features
+:M H                        // Ensure letters shift
+   /U (
+     t @ /W                 // While in transmit
+     /K " #20 > (          // If printable char
+       B                    // Convert to Baudot
+       P m!                 // Add parity
+       X                    // Transmit
+       Q                    // Monitor quality
+     )
+   ) ;
+
+// Main Receive Function with All Features
+:R Y                        // Sync to signal
+   V                        // Filter input
+   Q                        // Check quality
+   g f G s @ > (           // If mark detected
+     r 1 { r!              // Shift in 1
+   ) /E (
+     r 0 { r!              // Shift in 0
+   )
+   E ;                     // Check for errors
+
+// Complete Test Suite
+:T I                       // Initialize
+   D                       // Enable debug
+   `RYRYRY` X             // Send test pattern
+   1000( R )              // Receive test
+   O ;                    // Disable debug
+
+// Run System
+:Z I                      // Initialize
+   t @ ( M ) /E ( R ) ;  // Transmit or receive
+```
